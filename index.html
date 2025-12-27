@@ -1,0 +1,33 @@
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>off-the-hook</title>
+  </head>
+<body>
+  <h1>Off the Hook</h1>
+
+  <div id="controls">
+    <input type="number" id="rows" placeholder="Rows" value="10" />
+    <input type="number" id="cols" placeholder="Columns" value="10" />
+    <button id="createGrid">Create Grid</button>
+    <button id="exportDoc">Export to Word</button>
+    <input type="color" id="colorPicker" value="#000000" />
+    <input type="number" id="cellSize" value="30" min="10" max="60" />
+    <label for="cellSize">Cell size (px)</label>
+    <button id="saveDesign">Save</button>
+    <input type="file" id="loadDesign" accept=".json" />
+
+
+
+  </div>
+
+  <div id="grid"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
