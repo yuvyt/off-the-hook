@@ -10,13 +10,21 @@
   </head>
 <body>
   <h1>Off the Hook</h1>
-
+  <!-- div : <div></div> // This is just a box that groups things together. Exists to: group elements, apply layout, apply styles attach behavior (JS)
+   also identifies as the id in Js / TypeScript
+   HTMLDivElement  -->
   <div id="controls">
+    <!-- id = "..." // Used to access it in TypeScript [getElementById("colorPicker")] needs to be descriptive-->
+    <!-- some types and their representation 
+     <input type="text">   manual input 
+     <input type="range">   slider 
+    -->
     <input type="number" id="rows" placeholder="Rows" value="10" />
     <input type="number" id="cols" placeholder="Columns" value="10" />
     <button id="createGrid">Create Grid</button>
     <button id="exportDoc">Export to Word</button>
-    <input type="color" id="colorPicker" value="#000000" />
+    <input type="color" id="colorPicker" value="#000000" /> <!-- type="color": An HTML color input, the browser renders a native color picker UI, no need for another language. The value will always be a hex color string-->
+    <button id="eraser">Eraser</button>
     <input type="number" id="cellSize" value="30" min="10" max="60" />
     <label for="cellSize">Cell size (px)</label>
     <button id="saveDesign">Save</button>
@@ -26,7 +34,9 @@
 
   </div>
 
-  <div id="grid"></div>
+  <div id="canvasWrapper"> <!-- the grid now lives inside canvasWrapper and not directly on the page-->
+    <div id="grid"></div>
+  </div>
 
   <script type="module" src="/src/main.ts"></script>
 </body>

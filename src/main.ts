@@ -13,6 +13,8 @@ type AppState = {
 
 let state: AppState | null = null;
 
+type Tool = "paint" | "erase";
+let currentTool: Tool = "paint";
 
 
 let isPainting = false; // "let" allows it to be reassigned later
@@ -51,8 +53,7 @@ document.getElementById("createGrid")!.addEventListener("click", () => {
   if (rows <= 0 || cols <= 0 || cellSize <= 0) {
   alert("Rows, columns, and cell size must be positive numbers");
   return;
-}
-
+  }
 
   grid.innerHTML = ""; // clears the grid and removes all child elemnts 
   
@@ -67,7 +68,6 @@ document.getElementById("createGrid")!.addEventListener("click", () => {
   colors: Array(rows * cols).fill("white"),
   };
 
-
   for (let i = 0; i < rows * cols; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
@@ -77,22 +77,25 @@ document.getElementById("createGrid")!.addEventListener("click", () => {
     cell.style.height = `${cellSize}px`;
 
     const paintCell = (index: number) => {
-      const selectedColor = colorPicker.value;
-      state!.colors[index] = selectedColor;
-      cell.dataset.color = selectedColor;
-      cell.style.background = selectedColor;
+      const color =
+        currentTool === "erase" ? "white" : colorPicker.value;
+
+      state!.colors[index] = color;
+      cell.dataset.color = color;
+      cell.style.background = color;
     };
 
-  cell.addEventListener("mousedown", () => {
-    isPainting = true;
-    paintCell(i); 
-  });
 
-  cell.addEventListener("mouseenter", () => {
-    if (isPainting) {
-      paintCell(i);
-    }
-  });
+    cell.addEventListener("mousedown", () => {
+      isPainting = true;
+      paintCell(i); 
+    });
+
+    cell.addEventListener("mouseenter", () => {
+      if (isPainting) {
+        paintCell(i);
+      }
+    });
 
     grid.appendChild(cell);
   }
@@ -187,4 +190,13 @@ document.getElementById("loadDesign")!.addEventListener("change", (e) => {
   reader.readAsText(file);
 });
 
+const eraserBtn = document.getElementById("eraser") as HTMLButtonElement;
+
+eraserBtn.addEventListener("click", () => {
+  currentTool = "erase";
+});
+
+colorPicker.addEventListener("change", () => {
+  currentTool = "paint";
+});
 
