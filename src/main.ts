@@ -22,6 +22,12 @@ document.addEventListener("mouseup", () => {
   isPainting = false;
 });
 
+let zoomLevel = 1;
+const ZOOM_STEP = 0.1;
+const MIN_ZOOM = 0.3;
+const MAX_ZOOM = 3;
+
+
 
 // creating DOM elements 
 const cellSizeInput = document.getElementById("cellSize") as HTMLInputElement; // Finds an element like: "cellSize" (<button id="createGrid">Create Grid</button>)
@@ -30,7 +36,9 @@ const rowsInput = document.getElementById("rows") as HTMLInputElement; // Looks 
 // <input> has .value, .checked, .type, .disabled etc
 const colsInput = document.getElementById("cols") as HTMLInputElement; // getElementById is a methos of document that lets you find one specific HTML element by its id
 const colorPicker = document.getElementById("colorPicker") as HTMLInputElement; // returns html input element (or null if the element doesnt exist or the script ran before the html loaded)
+const paintBtn = document.getElementById("paint") as HTMLButtonElement;
 
+paintBtn.classList.add("active");
 
 // element.addEventListener(eventType, callback), eventType - e.g. "click", "input", "change", call back - a function that runs when the event 
 // "change" - The value changes and element loses focus / value is committed
@@ -104,7 +112,27 @@ document.getElementById("createGrid")!.addEventListener("click", () => {
 
     grid.appendChild(cell);
   }
+
+  applyZoom();
+
 });
+
+const gridWrapper = document.getElementById("canvasWrapper") as HTMLDivElement;
+gridWrapper.addEventListener("wheel", (e) => {
+  if (!e.ctrlKey) return;
+
+  e.preventDefault();
+
+  const delta = e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP;
+  zoomLevel = Math.min(
+    MAX_ZOOM,
+    Math.max(MIN_ZOOM, zoomLevel + delta)
+  );
+
+  applyZoom();
+});
+
+
 
 document.getElementById("exportDoc")!.addEventListener("click", async () => {
   const cells = Array.from(grid.children) as HTMLDivElement[];
@@ -195,14 +223,49 @@ document.getElementById("loadDesign")!.addEventListener("change", (e) => {
   reader.readAsText(file);
 });
 
+paintBtn.addEventListener("click", () => {
+  activeTool = "paint";
+
+  paintBtn.classList.add("active");
+  eraserBtn.classList.remove("active");
+});
+
+
 const eraserBtn = document.getElementById("eraser") as HTMLButtonElement;
 
 eraserBtn.addEventListener("click", () => {
   if (activeTool === "erase") {
     activeTool = "paint";
     eraserBtn.classList.remove("active");
+    paintBtn.classList.add("active");
   } else {
     activeTool = "erase";
     eraserBtn.classList.add("active");
+    paintBtn.classList.remove("active");
   }
+});
+
+
+
+const zoomInBtn = document.getElementById("zoomIn")!;
+const zoomOutBtn = document.getElementById("zoomOut")!;
+
+const applyZoom = () => {
+  grid.style.transform = `scale(${zoomLevel})`;
+};
+
+zoomInBtn.addEventListener("click", () => {
+  zoomLevel = Math.min(MAX_ZOOM, zoomLevel + ZOOM_STEP);
+  applyZoom();
+});
+
+zoomOutBtn.addEventListener("click", () => {
+  zoomLevel = Math.max(MIN_ZOOM, zoomLevel - ZOOM_STEP);
+  applyZoom();
+});
+
+colorPicker.addEventListener("change", () => {
+  activeTool = "paint";
+  paintBtn.classList.add("active");
+  eraserBtn.classList.remove("active");
 });

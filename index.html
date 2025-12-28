@@ -23,16 +23,22 @@
     <input type="number" id="cols" placeholder="Columns" value="10" />
     <button id="createGrid">Create Grid</button>
     <button id="exportDoc">Export to Word</button>
-    <input type="color" id="colorPicker" value="#000000" /> <!-- type="color": An HTML color input, the browser renders a native color picker UI, no need for another language. The value will always be a hex color string-->
-    <button id="eraser">Eraser</button>
+    
     <input type="number" id="cellSize" value="30" min="10" max="60" />
     <label for="cellSize">Cell size (px)</label>
     <button id="saveDesign">Save</button>
     <input type="file" id="loadDesign" accept=".json" />
 
-
-
   </div>
+
+  <div id="toolbar">
+  <button id="zoomIn">+</button>
+  <button id="zoomOut">−</button>
+  <button id="paint">Paint</button>
+  <input type="color" id="colorPicker" value="#000000" /> <!-- type="color": An HTML color input, the browser renders a native color picker UI, no need for another language. The value will always be a hex color string-->
+  <button id="eraser">Eraser</button>
+  </div>
+
 
   <div id="canvasWrapper"> <!-- the grid now lives inside canvasWrapper and not directly on the page-->
     <div id="grid"></div>
