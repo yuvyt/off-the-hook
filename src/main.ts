@@ -14,8 +14,7 @@ type AppState = {
 let state: AppState | null = null;
 
 type Tool = "paint" | "erase";
-let currentTool: Tool = "paint";
-
+let activeTool: Tool = "paint";
 
 let isPainting = false; // "let" allows it to be reassigned later
 
@@ -77,12 +76,18 @@ document.getElementById("createGrid")!.addEventListener("click", () => {
     cell.style.height = `${cellSize}px`;
 
     const paintCell = (index: number) => {
-      const color =
-        currentTool === "erase" ? "white" : colorPicker.value;
+      if (!state) return;
 
-      state!.colors[index] = color;
-      cell.dataset.color = color;
-      cell.style.background = color;
+      if (activeTool === "erase") {
+        state.colors[index] = "white";
+        cell.dataset.color = "white";
+        cell.style.background = "white";
+      } else {
+        const selectedColor = colorPicker.value;
+        state.colors[index] = selectedColor;
+        cell.dataset.color = selectedColor;
+        cell.style.background = selectedColor;
+      }
     };
 
 
@@ -193,10 +198,11 @@ document.getElementById("loadDesign")!.addEventListener("change", (e) => {
 const eraserBtn = document.getElementById("eraser") as HTMLButtonElement;
 
 eraserBtn.addEventListener("click", () => {
-  currentTool = "erase";
+  if (activeTool === "erase") {
+    activeTool = "paint";
+    eraserBtn.classList.remove("active");
+  } else {
+    activeTool = "erase";
+    eraserBtn.classList.add("active");
+  }
 });
-
-colorPicker.addEventListener("change", () => {
-  currentTool = "paint";
-});
-
